@@ -9,6 +9,9 @@ const argv = yargs
       description: 'Set template type',
       default: 'component',
     },
+    flag: {
+      alias: 'f',
+    },
   })
   .version(pkg.version).alias('version', 'v')
   .argv;

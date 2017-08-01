@@ -12,6 +12,7 @@ export default (argv) => {
     throw new Error('lack name');
   }
   const config = _config[argv.type];
+  const flag = argv.flag;
   if (!_.isPlainObject(config)) {
     throw new TypeError();
   }
@@ -21,7 +22,7 @@ export default (argv) => {
   fileList
     .filter(config.filter || _.identity)
     .map((a) => {
-      const result = config.handle({ name, file: path.parse(a) });
+      const result = config.handle({ name, flag, file: path.parse(a) });
       if (!result) {
         return null;
       }
