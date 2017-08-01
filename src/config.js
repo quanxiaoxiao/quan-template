@@ -1,6 +1,6 @@
 import path from 'path';
 
-const defaultConfig = {
+export default {
   component: {
     from: path.resolve(__dirname, '../', 'templates/component'),
     handle(a) {
@@ -19,13 +19,13 @@ const defaultConfig = {
       if (/^__\w+__$/.test(a.file.name)) {
         filename = `${a.name}${a.file.ext}`;
       }
-      if (subIndex !== -1) {
-        return {
-          to: path.join('temp/components', flagList[subIndex + 1], filename),
-        };
-      }
       return {
-        to: path.join('temp/components', a.name, filename),
+        to: path.join(
+          'temp/components',
+          subIndex !== -1 ? flagList[subIndex + 1] : a.name,
+          filename,
+        ),
+        from: path.resolve(this.from, a.file.base),
       };
     },
   },
@@ -39,6 +39,7 @@ const defaultConfig = {
       }
       return {
         to: path.join('temp/containers', a.name, filename),
+        from: path.resolve(this.from, a.file.base),
       };
     },
   },
@@ -56,5 +57,3 @@ const defaultConfig = {
     },
   },
 };
-
-export default defaultConfig;
