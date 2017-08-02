@@ -61,8 +61,8 @@ export default {
     },
   },
 
-  dir: {
-    from: path.resolve(__dirname, '../', 'src'),
+  react: {
+    from: path.resolve(__dirname, '../', 'templates/react'),
     filter({ filename }) {
       if (filename === 'node_modules') {
         return false;

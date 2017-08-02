@@ -1,0 +1,16 @@
+{
+  "name": "quan-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "npm run clean && cross-env NODE_ENV=production webpack",
+    "clean": "rimraf dist",
+    "dev": "cross-env NODE_ENV=development norice",
+    "lint": "eslint src"
+  },
+  "devDependencies": {
+  },
+  "dependencies": {
+  }
+}

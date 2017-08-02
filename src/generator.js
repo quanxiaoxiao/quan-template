@@ -31,7 +31,7 @@ export default function generator(name, flag, config) {
       generator(name, flag, {
         ...config,
         from: obj.from,
-        dir: path.basename(obj.from),
+        dir: path.join(config.dir || '', path.basename(obj.from)),
       });
     } else {
       createFile(obj);
