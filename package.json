@@ -1,11 +1,12 @@
 {
   "name": "quan-template",
-  "version": "0.0.1",
+  "version": "1.0.4",
   "main": "index.js",
   "license": "MIT",
   "bin": {
     "temp": "./bin/index.js"
   },
+  "author": "zhedongHu <quan_xiaoxiao@qq.com>",
   "scripts": {
     "lint": "eslint src",
     "build": "./node_modules/.bin/babel src -d lib",

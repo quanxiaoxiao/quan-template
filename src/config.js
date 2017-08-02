@@ -176,7 +176,6 @@ try {
   const _config = require(path.resolve(os.homedir(), 'temp.config.js')); // eslint-disable-line
   customConfig = combineConfig(_config, defaultConfig);
 } catch (e) {
-  console.log(e);
   // ignore
 }
 
