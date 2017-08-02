@@ -1,4 +1,5 @@
 import fs from 'fs';
+import shelljs from 'shelljs';
 import { getAbsoultePath } from './utils';
 
 export default function getFileList(from) {
@@ -10,8 +11,7 @@ export default function getFileList(from) {
       .map(getAbsoultePath);
   }
   from = getAbsoultePath(from); // eslint-disable-line
-  const stats = fs.statSync(from);
-  if (stats.isDirectory()) {
+  if (shelljs.test('-d', from)) {
     return fs.readdirSync(from);
   }
   return [from];

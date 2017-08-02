@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import _config from '../config';
 
-import getFileList from '../getFileList';
 import generator from '../generator';
 
 export default (argv) => {
@@ -15,6 +14,8 @@ export default (argv) => {
     throw new TypeError();
   }
 
-  const fileList = getFileList(config.from);
-  generator(name, flag, fileList, config);
+  generator(name, flag, config);
+  if (typeof config.post === 'function') {
+    config.post();
+  }
 };
