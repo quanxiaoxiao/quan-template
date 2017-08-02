@@ -1,5 +1,6 @@
 import path from 'path';
 import shelljs from 'shelljs';
+import os from 'os';
 
 const defaultConfig = {
   default: {
@@ -141,34 +142,53 @@ const defaultConfig = {
       shelljs.exec(`yarn add --dev ${devDependencies.join(' ')}`);
     },
   },
+
+  dir: {
+    from: 'some dir path',
+    handle(a) {
+      return {
+        from: path.resolve(this.from, a.file.base),
+        to: path.join(a.name, a.file.dir, a.file.base),
+      };
+    },
+  },
 };
 
+function combineConfig(a, b) {
+  return Object.keys(a)
+    .reduce((acc, key) => {
+      const obj = a[key];
+      obj.parent = b[obj.extend] || {};
+      return {
+        ...acc,
+        [key]: {
+          ...obj.parent,
+          ...obj,
+        },
+      };
+    }, {});
+}
+
+let selfConfig = {};
 let customConfig = {};
 
 try {
-  const _config = require(path.resolve(process.cwd(), 'temp.config.js')); // eslint-disable-line
-  customConfig = Object.keys(_config).reduce((acc, key) => {
-    const typeObj = _config[key];
-    let parent = defaultConfig[typeObj.extend];
-    if (parent) {
-      typeObj.parent = parent;
-    } else {
-      parent = {};
-    }
-    return {
-      ...acc,
-      [key]: {
-        ...parent,
-        ...typeObj,
-      },
-    };
-  }, {});
+  const _config = require(path.resolve(os.homedir(), 'temp.config.js')); // eslint-disable-line
+  customConfig = combineConfig(_config, defaultConfig);
 } catch (e) {
   console.log(e);
+  // ignore
+}
+
+try {
+  const _config = require(path.resolve(process.cwd(), 'temp.config.js')); // eslint-disable-line
+  selfConfig = combineConfig(_config, defaultConfig);
+} catch (e) {
   // ignore
 }
 
 export default {
   ...defaultConfig,
   ...customConfig,
+  ...selfConfig,
 };
