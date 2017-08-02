@@ -7,7 +7,7 @@ const argv = yargs
     type: {
       alias: 't',
       description: 'Set template type',
-      default: 'component',
+      default: 'default',
     },
     flag: {
       alias: 'f',

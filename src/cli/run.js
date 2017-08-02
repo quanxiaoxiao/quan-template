@@ -16,6 +16,6 @@ export default (argv) => {
 
   generator(name, flag, config);
   if (typeof config.post === 'function') {
-    config.post();
+    config.post(name, flag);
   }
 };

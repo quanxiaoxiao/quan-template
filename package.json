@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "main": "index.js",
   "license": "MIT",
+  "bin": {
+    "temp": "./bin/index.js"
+  },
   "scripts": {
     "lint": "eslint src",
     "build": "./node_modules/.bin/babel src -d lib",

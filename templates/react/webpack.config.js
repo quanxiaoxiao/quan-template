@@ -8,7 +8,7 @@ const isProd = nodeEnv === 'production';
 
 const APP_ENTRY = './src/index.js';
 const webpackConfig = {
-  devtool: isProd ? '' : 'cheap-eval-source-map',
+  devtool: isProd ? '' : 'source-map',
   entry: {
     app: isProd ?
       [APP_ENTRY] :
