@@ -9,6 +9,15 @@ npm install -g quan-template
 ```bash
 temp ls
 ```
+![Animated GIF of temp in action](docs/1.gif)
+
+![Animated GIF of temp in action](docs/2.gif)
+
+![Animated GIF of temp in action](docs/3.gif)
+
+![Animated GIF of temp in action](docs/4.gif)
+
+![Animated GIF of temp in action](docs/5.gif)
 
 ### create react app
 ```bash
@@ -49,11 +58,11 @@ module.exporst = {
     },
   },
   bus: {
-    extends: 'default',
+    extend: 'default',
     handle(a) {
       const result = this.parent.handle(a);
       return Object.assign({}, result, {
-        to: result.to.replace(/\bsrc\/components\b/, 'src/scenes/Bus/components'),
+        to: result.to.replace(/\bsrc[\/\\]components\b/, 'src/scenes/Bus/components'),
       });
     },
   },
