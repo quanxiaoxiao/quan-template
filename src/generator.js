@@ -11,7 +11,7 @@ export default function generator(name, flag, config) {
       name,
       convert: convertContent,
       from: config.from,
-      ...config.handle({
+      ...config.handle.call(config, {
         name,
         flag,
         file: {

@@ -124,7 +124,7 @@ const defaultConfig = {
   pro: {
     from: path.resolve(__dirname, '../', 'templates/pro'),
     filter({ filename }) {
-      if (filename === 'node_modules') {
+      if (filename === 'node_modules' || filename === 'server.js') {
         return false;
       }
       return true;
