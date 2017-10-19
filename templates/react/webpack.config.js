@@ -54,6 +54,13 @@ const webpackConfig = {
     ],
   },
 
+  resolve: {
+    modules: [
+      path.join(__dirname, 'src'),
+      'node_modules',
+    ],
+  },
+
   plugins: [
     new HtmlWebpackPlugin({
       template: './src/index.html',
@@ -115,7 +122,7 @@ if (isProd) {
 
   webpackConfig.plugins.push(
     new ExtractTextplugin({ filename: 'style.css', allChunks: true }),
-    new webpack.optimize.UglifyJsPlugin() // eslint-disable-line
+    new webpack.optimize.UglifyJsPlugin(),
   );
 } else {
   webpackConfig.module.rules.push({

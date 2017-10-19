@@ -98,7 +98,7 @@ const defaultConfig = {
         'babel-core',
         'babel-loader',
         'babel-plugin-transform-runtime',
-        'babel-preset-es2015',
+        'babel-preset-env',
         'babel-preset-react',
         'babel-preset-react-hmre',
         'babel-preset-stage-0',
