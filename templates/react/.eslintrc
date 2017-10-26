@@ -23,5 +23,8 @@
   ],
   "globals": {
     "__DEVELOPMENT__": false
+  },
+  "settings": {
+    "import/resolver": "webpack"
   }
 }
