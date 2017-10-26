@@ -139,8 +139,8 @@ const defaultConfig = {
     post(name) {
       shelljs.cd(name);
       shelljs.sed('-i', /"name":\s+"([^"]+)"/, `"name": "${name}"`, 'package.json');
-      const devDependencies = ['babel-core', 'babel-preset-es2015', 'babel-preset-stage-0'];
-      shelljs.exec(`yarn add --dev ${devDependencies.join(' ')}`);
+      const devDependencies = ['babel-core', 'babel-preset-env', 'babel-preset-stage-0'];
+      shelljs.exec(`npm install --save-dev ${devDependencies.join(' ')}`);
     },
   },
 
