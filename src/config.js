@@ -106,6 +106,7 @@ const defaultConfig = {
         'css-loader',
         'extract-text-webpack-plugin',
         'html-webpack-plugin',
+        'lodash-webpack-plugin',
         'node-sass',
         'postcss-loader',
         'redux-logger',
@@ -116,8 +117,8 @@ const defaultConfig = {
         'webpack',
         'webpack-hot-middleware',
       ];
-      shelljs.exec(`yarn add ${dependencies.join(' ')}`);
-      shelljs.exec(`yarn add --dev ${devDependencies.join(' ')}`);
+      shelljs.exec(`npm install ${dependencies.join(' ')}`);
+      shelljs.exec(`npm install --save-dev ${devDependencies.join(' ')}`);
     },
   },
 

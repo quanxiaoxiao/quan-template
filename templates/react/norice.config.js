@@ -1,5 +1,5 @@
 module.exports = {
-  webpack: './webpack.config.js',
+  webpack: './webpack.config.development.js',
   paths: {
   },
 };
