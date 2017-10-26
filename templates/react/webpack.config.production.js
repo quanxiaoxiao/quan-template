@@ -48,11 +48,20 @@ module.exports = {
           fallback: 'style-loader',
           use: [
             'css-loader',
-            'postcss-loader',
+            {
+              loader: 'postcss-loader',
+              options: {
+                plugins: () => [require('autoprefixer')],
+              },
+            },
           ],
         }),
       },
     ],
+  },
+
+  resolve: {
+    ...baseConfig.resolve,
   },
 
   plugins: [

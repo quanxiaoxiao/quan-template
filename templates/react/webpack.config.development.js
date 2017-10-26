@@ -1,5 +1,3 @@
-/* eslint import/no-unresolved:0 */
-/* eslint import/no-extraneous-dependencies:0 */
 const webpack = require('webpack');
 const baseConfig = require('./webpack.config.base');
 
@@ -48,10 +46,19 @@ module.exports = {
         use: [
           'style-loader',
           'css-loader',
-          'postcss-loader',
+          {
+            loader: 'postcss-loader',
+            options: {
+              plugins: () => [require('autoprefixer')],
+            },
+          },
         ],
       },
     ],
+  },
+
+  resolve: {
+    ...baseConfig.resolve,
   },
 
   plugins: [
