@@ -25,6 +25,10 @@
     "__DEVELOPMENT__": false
   },
   "settings": {
-    "import/resolver": "webpack"
+    "import/resolver": {
+      "webpack": {
+        "config": "./webpack.config.base.js"
+      }
+    }
   }
 }

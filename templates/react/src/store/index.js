@@ -19,7 +19,7 @@ export default function configureStore(initialState = {}) {
       collapsed: true,
     });
     middlewares.push(loggerMiddleware);
-    const devToolsExtension = window.devToolsExtension;
+    const { devToolsExtension } = window;
     if (devToolsExtension) {
       enhancers.push(devToolsExtension());
     }
@@ -36,7 +36,7 @@ export default function configureStore(initialState = {}) {
 
   if (__DEVELOPMENT__ && module.hot) {
     module.hot.accept('../reducers', () => {
-      store.replaceReducer(require('../reducers'));
+      store.replaceReducer(require('../reducers').default);
     });
   }
   return store;
