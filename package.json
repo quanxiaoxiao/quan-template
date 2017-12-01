@@ -1,26 +1,24 @@
 {
-  "name": "quan-template",
-  "version": "1.0.9",
-  "main": "index.js",
+  "name": "template",
+  "version": "1.0.0",
+  "main": "./lib/index.js",
   "license": "MIT",
   "bin": {
     "temp": "./bin/index.js"
   },
-  "author": "zhedongHu <quan_xiaoxiao@qq.com>",
   "scripts": {
     "lint": "eslint src",
-    "build": "./node_modules/.bin/babel src -d lib",
-    "build:watch": "./node_modules/.bin/babel src --watch -d lib"
+    "test": "ava test"
   },
   "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-stage-0": "^6.24.1"
+    "ava": "^0.23.0"
   },
   "dependencies": {
-    "chalk": "^2.2.0",
+    "chalk": "^2.3.0",
     "lodash": "^4.17.4",
     "shelljs": "^0.7.8",
+    "split2": "^2.2.0",
+    "through2": "^2.0.3",
     "yargs": "^10.0.3"
   }
 }
