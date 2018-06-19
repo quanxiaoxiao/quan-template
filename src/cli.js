@@ -4,8 +4,8 @@ const {
   flatMap,
   switchMap,
 } = require('rxjs/operators');
-const pkg = require('../package.json');
 const chalk = require('chalk');
+const pkg = require('../package.json');
 const {
   createFile$,
   toPromise,
@@ -17,7 +17,6 @@ const {
   callback$,
   parseUrl$,
 } = require('./observable');
-
 
 yargs // eslint-disable-line
   .command({

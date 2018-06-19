@@ -4,7 +4,6 @@ const pathToRegexp = require('path-to-regexp');
 const qs = require('querystring');
 const _ = require('lodash');
 const shelljs = require('shelljs');
-const os = require('os');
 const fs = require('fs');
 const chalk = require('chalk');
 const {
@@ -25,9 +24,8 @@ const {
 } = require('rxjs/operators');
 const url = require('url');
 const { getFileList } = require('./utils');
+const { configDir, configFilePath } = require('../config');
 
-const configDir = path.resolve(os.homedir(), 'templates');
-const configPath = path.join(configDir, 'config.js');
 const noop = a => a;
 
 const parseUrl$ = str => of(url.parse(str))
@@ -36,13 +34,13 @@ const parseUrl$ = str => of(url.parse(str))
     query: qs.parse(query),
   })));
 
-const config$ = () => bindNodeCallback(fs.readFile)(configPath, 'utf-8')
+const config$ = () => bindNodeCallback(fs.readFile)(configFilePath, 'utf-8')
   .pipe(map((script) => {
-    const mod = new Module(configPath, module);
-    mod.__filename = configPath;
+    const mod = new Module(configFilePath, module);
+    mod.__filename = configFilePath;
     mod.__dirname = configDir;
     mod.paths = Module._nodeModulePaths(configDir);
-    mod._compile(script, configPath);
+    mod._compile(script, configFilePath);
     return mod.exports;
   }));
 
