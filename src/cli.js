@@ -1,58 +1,61 @@
 const yargs = require('yargs');
-const { forkJoin } = require('rxjs');
+const {
+  of,
+  concat,
+  iif,
+} = require('rxjs');
 const {
   flatMap,
   switchMap,
+  last,
+  tap,
 } = require('rxjs/operators');
 const chalk = require('chalk');
 const pkg = require('../package.json');
 const {
   createFile$,
-  toPromise,
   fileList$,
   updateFile$,
-  options$,
   config$,
-  match$,
-  callback$,
-  parseUrl$,
+  select$,
 } = require('./observable');
 
 yargs // eslint-disable-line
-  .command({
-    command: 'create <path>',
-    desc: 'create some files from templates',
-    handler: async (argv) => {
-      const wait = {};
-      try {
-        await toPromise(options$(argv.path, wait)
-          .pipe(
-            switchMap(fileList$),
-            flatMap(createFile$),
-          ));
-        wait.complete('create');
-      } catch (error) {
-        console.log(chalk.red(error));
-      }
+  .command(
+    'get <path>',
+    'create some files from templates',
+    () => yargs.options({
+      header: {
+        alias: 'H',
+      },
+      cover: {
+        alias: 'c',
+        default: 'false',
+      },
+      data: {
+        alias: 'd',
+      },
+    }),
+    (argv) => {
+      select$(argv.path)
+        .pipe(
+          switchMap(({ next, ...options }) =>
+            concat(fileList$(options)
+              .pipe(flatMap(des => iif(
+                () => argv.cover === 'true',
+                updateFile$(des),
+                createFile$(des),
+              ))), of(next))),
+          last(),
+          tap(next => next()),
+        )
+        .subscribe({
+          error: (error) => {
+            console.log(chalk.red(error));
+          },
+        });
     },
-  })
-  .command({
-    command: 'update <path>',
-    desc: 'update some files from templates',
-    handler: async (argv) => {
-      try {
-        const wait = {};
-        await toPromise(options$(argv.path, wait)
-          .pipe(
-            switchMap(fileList$),
-            flatMap(updateFile$),
-          ));
-        wait.complete('update');
-      } catch (error) {
-        console.log(chalk.red(error));
-      }
-    },
-  })
+  )
   .command({
     command: 'ls',
     desc: 'list path',
@@ -67,14 +70,7 @@ yargs // eslint-disable-line
     command: 'info <path>',
     desc: 'show info with path',
     handler: (argv) => {
-      forkJoin(
-        config$(),
-        parseUrl$(argv.path),
-      )
-        .pipe(
-          switchMap(([cfg, { query, pathname }]) => match$({ cfg, query, pathname })),
-          switchMap(callback$),
-        )
+      select$(argv.path)
         .subscribe(
           (result) => {
             console.log(result);

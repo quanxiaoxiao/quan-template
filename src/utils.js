@@ -2,6 +2,9 @@ const fs = require('fs');
 const { resolve } = require('path');
 
 function getFileList(filePath) {
+  if (filePath == null) {
+    return [];
+  }
   const stats = fs.statSync(filePath);
   const result = [];
   if (stats.isDirectory()) {

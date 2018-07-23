@@ -10,7 +10,6 @@ const {
   of,
   bindNodeCallback,
   throwError,
-  bindCallback,
   iif,
   forkJoin,
   from,
@@ -43,8 +42,6 @@ const config$ = () => bindNodeCallback(fs.readFile)(configFilePath, 'utf-8')
     mod._compile(script, configFilePath);
     return mod.exports;
   }));
-
-const callback$ = ({ handler, ...other }) => bindCallback(handler)(other);
 
 const match$ = ({ pathname, query, cfg }) =>
   of(Object.keys(cfg).find(key => pathToRegexp(key).test(pathname)))
@@ -120,87 +117,59 @@ const updateFile$ = ({ source, destination, handleContent }) =>
       map(() => destination),
     );
 
-const options$ = (str, wait = {}) =>
+const select$ = str =>
   forkJoin(
     parseUrl$(str),
     config$(),
-  ).pipe(
-    switchMap(([{ pathname, query }, cfg]) => match$({ pathname, query, cfg })),
-    switchMap(callback$),
-    tap(({ complete = () => {} }) => {
-      wait.complete = complete; // eslint-disable-line
-    }),
-    map(({
-      to,
-      from: _from,
-      include,
-      exclude = [],
-      handlePathName = noop,
-      handleContent = noop,
-    }) => ({
-      to: path.resolve(process.cwd(), to),
-      from: path.resolve(configDir, _from),
-      include,
-      exclude: [/\.swp$/, ...exclude],
-      handlePathName,
-      handleContent,
-    })),
-  );
+  )
+    .pipe(
+      switchMap(([{ pathname, query }, cfg]) => match$({ pathname, query, cfg })),
+      map(({ handler, ...other }) => handler(other)),
+      map(options => ({
+        ...(options && options.from != null) ? {
+          to: path.resolve(process.cwd(), options.to || ''),
+          from: path.resolve(configDir, options.from),
+          include: options.include || [],
+          exclude: [/\.swp$/, ...(options.exclude || [])],
+          handlePathName: options.handlePathName || noop,
+          handleContent: options.handleContent || noop,
+          next: options.next || function next() {},
+        } : {
+          next: options ? (options.next || function next() {}) : () => {},
+        },
+      })),
+    );
 
-const fileList$ = ({
-  to,
-  from: _from,
-  include,
-  exclude,
-  handlePathName,
-  handleContent,
-}) => from(getFileList(_from))
+const fileList$ = options => from(getFileList(options.from))
   .pipe(
     map(source => ({
       source,
-      basename: _from.length === source.length ?
+      basename: options.from.length === source.length ?
         path.basename(source) :
-        source.substring(_from.length).replace(/^\//, ''),
+        source.substring(options.from.length).replace(/^\//, ''),
     })),
     filter(({ basename }) => {
-      if ([/\.swp$/, ...exclude].some(a => a.test(basename))) {
+      if ([/\.swp$/, ...options.exclude].some(a => a.test(basename))) {
         return false;
       }
-      if (_.isEmpty(include)) {
+      if (_.isEmpty(options.include)) {
         return true;
       }
-      return include.some(a => a.test(basename));
+      return options.include.some(a => a.test(basename));
     }),
     map(({ source, basename }) => ({
       source,
-      destination: path.resolve(process.cwd(), to, handlePathName(basename)),
-      handleContent,
+      destination: path.resolve(process.cwd(), options.to, options.handlePathName(basename)),
+      handleContent: options.handleContent,
     })),
   );
 
-const toPromise = observe => new Promise((resolve, reject) => {
-  const store = [];
-  observe.subscribe({
-    next: (data) => {
-      store.push(data);
-    },
-    complete: () => {
-      resolve(store);
-    },
-    error: (error) => {
-      reject(error);
-    },
-  });
-});
-
 module.exports = {
   updateFile$,
+  select$,
   parseUrl$,
   config$,
-  options$,
   match$,
-  callback$,
   createFile$,
   fileList$,
-  toPromise,
 };
