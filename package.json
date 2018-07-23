@@ -1,6 +1,6 @@
 {
   "name": "quan-template",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "",
   "main": "./bin/index.js",
   "bin": {
@@ -19,8 +19,8 @@
     "chalk": "^2.4.1",
     "lodash": "^4.17.10",
     "path-to-regexp": "^2.2.1",
-    "rxjs": "^6.2.1",
+    "rxjs": "^6.2.2",
     "shelljs": "^0.8.2",
-    "yargs": "^11.0.0"
+    "yargs": "^12.0.1"
   }
 }
