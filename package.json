@@ -1,6 +1,6 @@
 {
   "name": "quan-template",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "",
   "main": "./bin/index.js",
   "bin": {
