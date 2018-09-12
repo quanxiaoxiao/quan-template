@@ -35,10 +35,11 @@ const parseUrl$ = str => of(url.parse(str))
 
 const config$ = () => bindNodeCallback(fs.readFile)(configFilePath, 'utf-8')
   .pipe(map((script) => {
-    const mod = new Module(configFilePath, module);
-    mod.__filename = configFilePath;
-    mod.__dirname = configDir;
+    const mod = new Module(configFilePath, null);
     mod.paths = Module._nodeModulePaths(configDir);
+    if (!mod.filename) {
+      mod.filename = configFilePath;
+    }
     mod._compile(script, configFilePath);
     return mod.exports;
   }));
